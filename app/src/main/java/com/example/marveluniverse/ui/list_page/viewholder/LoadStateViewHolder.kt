@@ -1,6 +1,5 @@
-package com.example.marveluniverse.ui.list_page
+package com.example.marveluniverse.ui.list_page.viewholder
 
-import android.util.Log
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +11,7 @@ class LoadStateViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.retryButton.setOnClickListener {
-            Log.d("#######: ", "LoadStateViewHolder#: ")
-            retry() }
+        binding.retryButton.setOnClickListener { retry() }
     }
 
     fun bind(loadState: LoadState) {

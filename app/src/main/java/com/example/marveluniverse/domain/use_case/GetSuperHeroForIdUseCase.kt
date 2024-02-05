@@ -1,5 +1,6 @@
 package com.example.marveluniverse.domain.use_case
 
+import com.example.marveluniverse.data.data_source.local.model.toSuperHero
 import com.example.marveluniverse.data.repository.MarvelUniverseRepository
 import com.example.marveluniverse.domain.model.SuperHero
 import kotlinx.coroutines.flow.Flow
@@ -13,26 +14,15 @@ class GetSuperHeroForIdUseCase @Inject constructor(
 
     operator fun invoke(characterId: String): Flow<SuperHero> {
         val superHeroDto = marvelRepository.getSuperHeroFoId(characterId)
-        return marvelRepository.getAllFavourites().map { favourites ->
-            favourites.asSequence()
-                .filter { it.id == characterId }
-                .map {
-                    SuperHero(
-                        id = superHeroDto.id,
-                        thumbnail = superHeroDto.thumbnail,
-                        name = superHeroDto.name,
-                        description = superHeroDto.description,
-                        isFavourite = true
-                    )
-                }.take(1)
-                .firstOrNull()
-                ?: SuperHero(
-                    id = superHeroDto.id,
-                    thumbnail = superHeroDto.thumbnail,
-                    name = superHeroDto.name,
-                    description = superHeroDto.description,
-                    isFavourite = false
-                )
-        }.distinctUntilChanged()
+        return marvelRepository.getAllFavourites()
+            .map { favourites ->
+                favourites.asSequence()
+                    .filter { it.id == characterId }
+                    .map { superHeroDto.toSuperHero(true) }
+                    .take(1)
+                    .firstOrNull()
+                    ?: superHeroDto.toSuperHero(false)
+            }
+            .distinctUntilChanged()
     }
 }

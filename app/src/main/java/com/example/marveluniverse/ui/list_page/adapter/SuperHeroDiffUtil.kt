@@ -1,4 +1,4 @@
-package com.example.marveluniverse.ui.list_page
+package com.example.marveluniverse.ui.list_page.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.marveluniverse.domain.model.SuperHero

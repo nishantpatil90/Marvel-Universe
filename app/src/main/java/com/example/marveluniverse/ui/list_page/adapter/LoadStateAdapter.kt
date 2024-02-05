@@ -1,10 +1,11 @@
-package com.example.marveluniverse.ui.list_page
+package com.example.marveluniverse.ui.list_page.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import com.example.marveluniverse.databinding.LoadingStateLayoutBinding
+import com.example.marveluniverse.ui.list_page.viewholder.LoadStateViewHolder
 
 class LoadStateAdapter(
     private val retry: () -> Unit,

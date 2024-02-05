@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.marveluniverse.data.data_source.local.model.Favourites
 import com.example.marveluniverse.data.data_source.local.model.SuperHeroDto
+import com.example.marveluniverse.data.data_source.local.model.toSuperHero
 import com.example.marveluniverse.domain.model.SuperHero
 import com.example.marveluniverse.domain.use_case.GetFavouritesUseCase
 import com.example.marveluniverse.domain.use_case.GetSuperHeroesUseCase
@@ -40,13 +41,7 @@ class ListViewModel @Inject constructor(
                 flow = getFavouritesUseCase(),
                 transform = { pagingData: PagingData<SuperHeroDto>, favourites: List<Favourites> ->
                     pagingData.map { superHeroDto ->
-                        SuperHero(
-                            id = superHeroDto.id,
-                            thumbnail = superHeroDto.thumbnail,
-                            name = superHeroDto.name,
-                            description = superHeroDto.description,
-                            isFavourite = favourites.any { it.id == superHeroDto.id }
-                        )
+                        superHeroDto.toSuperHero(favourites.any { it.id == superHeroDto.id })
                     }
                 })
     }

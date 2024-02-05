@@ -1,6 +1,5 @@
 package com.example.marveluniverse.data.data_source
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -10,10 +9,11 @@ import com.example.marveluniverse.data.data_source.local.MarvelDatabase
 import com.example.marveluniverse.data.data_source.local.model.SuperHeroDto
 import com.example.marveluniverse.data.data_source.local.model.SuperHeroRemoteKeys
 import com.example.marveluniverse.data.data_source.remote.MarvelApiClient
+import com.example.marveluniverse.data.data_source.remote.model.toSuperHerDto
 import com.example.marveluniverse.utils.PAGE_SIZE
 
 @OptIn(ExperimentalPagingApi::class)
-class MarvelSuperheroMediatorSource (
+class MarvelSuperheroMediatorSource(
     private val marvelDb: MarvelDatabase,
     private val apiClient: MarvelApiClient
 ) : RemoteMediator<Int, SuperHeroDto>() {
@@ -85,22 +85,13 @@ class MarvelSuperheroMediatorSource (
                     )
                 }
 
-                val superHeroes = characters.map {
-                    val thumbnailUrl = "${it.thumbnail?.path}.${it.thumbnail?.extension}"
-                    SuperHeroDto(
-                        id = it.id ?: "",
-                        name = it.name ?: "",
-                        description = it.description ?: "",
-                        thumbnail = thumbnailUrl.replace("http", "https")
-                    )
-                }
+                val superHeroes = characters.mapNotNull { it.toSuperHerDto() }
                 remoteKeyDao.addAllRemoteKeys(remoteKeys = keys)
                 superHeroDao.upsertAll(superHeroes)
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {
-            Log.d("####### ", "MarvelSuperheroMediatorSource#load: $e")
             MediatorResult.Error(e)
         }
     }
@@ -108,12 +99,8 @@ class MarvelSuperheroMediatorSource (
     private suspend fun getRemoteKeyClosestToCurrentPosition(
         state: PagingState<Int, SuperHeroDto>
     ): SuperHeroRemoteKeys? {
-        Log.d("MEDIATOR", "state.anchorPosition ${state.anchorPosition}")
-
         return state.anchorPosition?.let { position ->
-            Log.d("MEDIATOR", "position $position")
             state.closestItemToPosition(position)?.id?.let { id ->
-
                 remoteKeyDao.getRemoteKeys(id = id)
             }
         }
@@ -122,19 +109,17 @@ class MarvelSuperheroMediatorSource (
     private suspend fun getRemoteKeyForFirstItem(
         state: PagingState<Int, SuperHeroDto>
     ): SuperHeroRemoteKeys? {
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { comic ->
-                remoteKeyDao.getRemoteKeys(id = comic.id)
-            }
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { comic ->
+            remoteKeyDao.getRemoteKeys(id = comic.id)
+        }
     }
 
     private suspend fun getRemoteKeyForLastItem(
         state: PagingState<Int, SuperHeroDto>
     ): SuperHeroRemoteKeys? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { comic ->
-                remoteKeyDao.getRemoteKeys(id = comic.id)
-            }
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { comic ->
+            remoteKeyDao.getRemoteKeys(id = comic.id)
+        }
     }
 
     private fun getOffsetByPage(page: Int): Int {

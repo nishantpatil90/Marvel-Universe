@@ -13,6 +13,8 @@ import androidx.paging.LoadState
 import com.example.marveluniverse.R
 import com.example.marveluniverse.databinding.ListActivityBinding
 import com.example.marveluniverse.ui.detail_page.SuperHeroDetailActivity
+import com.example.marveluniverse.ui.list_page.adapter.LoadStateAdapter
+import com.example.marveluniverse.ui.list_page.adapter.SuperHeroListAdapter
 import com.example.marveluniverse.ui.list_page.ui_state.SuperHeroListUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

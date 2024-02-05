@@ -1,4 +1,4 @@
-package com.example.marveluniverse.ui.list_page
+package com.example.marveluniverse.ui.list_page.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marveluniverse.databinding.SuperheroListItemLayoutBinding
