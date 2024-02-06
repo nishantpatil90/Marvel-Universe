@@ -1,8 +1,8 @@
 package com.example.marveluniverse.domain.use_case
 
 import com.example.marveluniverse.data.data_source.local.model.toSuperHero
-import com.example.marveluniverse.data.repository.MarvelUniverseRepository
 import com.example.marveluniverse.domain.model.SuperHero
+import com.example.marveluniverse.domain.repository.MarvelUniverseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

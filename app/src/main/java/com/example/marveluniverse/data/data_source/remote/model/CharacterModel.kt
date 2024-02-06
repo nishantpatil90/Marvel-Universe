@@ -16,7 +16,7 @@ fun CharacterModel.toSuperHerDto(): SuperHeroDto? {
     return SuperHeroDto(
         id = id ?: "",
         name = name ?: "",
-        thumbnail = "${thumbnail?.path}.${thumbnail?.extension}",
+        thumbnail = "${thumbnail?.path}.${thumbnail?.extension}".replace("http", "https"),
         description = description ?: "",
     )
 }
