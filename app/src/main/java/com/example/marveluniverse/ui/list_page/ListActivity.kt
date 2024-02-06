@@ -88,12 +88,8 @@ class ListActivity : AppCompatActivity() {
                 with(binding) {
                     emptyList.isVisible = isListEmpty
                     superheroRv.isVisible = !isListEmpty
-                    progressBar.isVisible =
-                        loadState.refresh is LoadState.Loading && !swipeContainer.isRefreshing
+                    swipeContainer.isRefreshing  = loadState.refresh is LoadState.Loading
                     retryButton.isVisible = loadState.refresh is LoadState.Error
-                    if (swipeContainer.isRefreshing) {
-                        swipeContainer.isRefreshing = loadState.refresh is LoadState.Loading
-                    }
                 }
 
                 val errorState = loadState.source.append as? LoadState.Error
